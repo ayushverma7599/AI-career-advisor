@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "a12345r12@",
+    "database": "careernavigator",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "a12345r12@",
+    "database": "careernavigator_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "a12345r12@",
+    "database": "careernavigator_prod",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}

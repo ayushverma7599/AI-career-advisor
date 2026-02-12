@@ -1,0 +1,67 @@
+module.exports = {
+  USER_ROLES: {
+    STUDENT: 'student',
+    TEACHER: 'teacher',
+    ALUMNI: 'alumni',
+    ADMIN: 'college_administrator'
+  },
+
+  ASSESSMENT_CATEGORIES: {
+    INTEREST: 'interest',
+    APTITUDE: 'aptitude',
+    PERSONALITY: 'personality',
+    LEARNING_STYLE: 'learning_style'
+  },
+
+  PUZZLE_DIFFICULTIES: {
+    EASY: 'Easy',
+    MEDIUM: 'Medium',
+    HARD: 'Hard',
+    EXPERT: 'Expert'
+  },
+
+  COIN_REWARDS: {
+    REGISTRATION: 75,
+    ASSESSMENT_COMPLETION: 50,
+    PUZZLE_EASY: 10,
+    PUZZLE_MEDIUM: 20,
+    PUZZLE_HARD: 35,
+    PUZZLE_EXPERT: 50,
+    STREAK_BONUS: 5,
+    PERFECT_SCORE: 10
+  },
+
+  FORUM_CATEGORIES: {
+    CAREER_GUIDANCE: 1,
+    COLLEGE_ADMISSIONS: 2,
+    STUDY_GROUPS: 3,
+    ALUMNI_NETWORK: 4,
+    TECHNICAL_SUPPORT: 5,
+    ANNOUNCEMENTS: 6
+  },
+
+  REGISTRATION_STEPS: {
+    BASIC_INFO: 1,
+    OTP_VERIFICATION: 2,
+    AADHAAR_VERIFICATION: 3,
+    PERSONAL_DETAILS: 4,
+    ACADEMIC_RECORDS: 5,
+    FAMILY_INFO: 6,
+    DOCUMENT_UPLOAD: 7,
+    REVIEW: 8,
+    SUBMISSION: 9
+  },
+
+  UPLOAD_LIMITS: {
+    FILE_SIZE: 5 * 1024 * 1024, // 5MB
+    IMAGE_SIZE: 2 * 1024 * 1024, // 2MB
+    DOCUMENT_SIZE: 10 * 1024 * 1024 // 10MB
+  },
+
+  VALIDATION_RULES: {
+    PASSWORD_MIN_LENGTH: 8,
+    OTP_LENGTH: 6,
+    PHONE_LENGTH: 10,
+    AADHAAR_LENGTH: 12
+  }
+};
