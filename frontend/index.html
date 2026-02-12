@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced CareerNavigator: Complete Student Platform v3.0</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; object-src 'none';">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #fff, #f0f8ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(45deg, #fa709a 0%, #fee140 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(250, 112, 154, 0.4);
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .auth-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .auth-method {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .auth-method:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn.primary {
+            background: linear-gradient(45deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .btn.success {
+            background: linear-gradient(45deg, #56ab2f 0%, #a8e6cf 100%);
+        }
+
+        .form-group {
+            margin: 15px 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* File Upload Styles - FIXED FOR CSP */
+        .file-upload {
+            border: 2px dashed rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .file-upload:hover {
+            border-color: #4facfe;
+            background: rgba(79, 172, 254, 0.1);
+        }
+
+        .file-upload.dragover {
+            border-color: #fa709a;
+            background: rgba(250, 112, 154, 0.1);
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-upload-icon {
+            font-size: 3rem;
+            opacity: 0.7;
+        }
+
+        .uploaded-files {
+            margin-top: 10px;
+        }
+
+        .uploaded-file {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-remove {
+            background: rgba(255, 0, 0, 0.6);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .file-remove:hover {
+            background: rgba(255, 0, 0, 0.8);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            transition: width 0.3s ease;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .step {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .step.active {
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            transform: scale(1.05);
+        }
+
+        .step.completed {
+            background: linear-gradient(45deg, #56ab2f 0%, #a8e6cf 100%);
+        }
+
+        .step h3 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .step p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .question-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .question h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .option.selected {
+            border-color: #4facfe;
+            background: linear-gradient(45deg, rgba(79, 172, 254, 0.3), rgba(0, 242, 254, 0.3));
+        }
+
+        .results-container {
+            display: grid;
+            gap: 20px;
+        }
+
+        .result-card {
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .colleges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .college-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .college-card:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .forum-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .posts-container {
+            margin-top: 20px;
+        }
+
+        .post {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #4facfe;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .course-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .course-card:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .puzzle-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .puzzle-card:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: 5px 0;
+        }
+
+        .difficulty-easy {
+            background: linear-gradient(45deg, #56ab2f 0%, #a8e6cf 100%);
+        }
+
+        .difficulty-medium {
+            background: linear-gradient(45deg, #f7971e 0%, #ffd200 100%);
+        }
+
+        .difficulty-hard {
+            background: linear-gradient(45deg, #fc4a1a 0%, #f7b733 100%);
+        }
+
+        .difficulty-expert {
+            background: linear-gradient(45deg, #8360c3 0%, #2ebf91 100%);
+        }
+
+        .redemption-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .redemption-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .redemption-card:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #4facfe;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Form validation styles */
+        .form-group.error input {
+            border-color: #ff4757;
+            background: rgba(255, 71, 87, 0.1);
+        }
+
+        .error-message {
+            color: #ff4757;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .success-message {
+            color: #2ed573;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        /* Document preview styles - FIXED */
+        .document-preview {
+            margin-top: 10px;
+            max-width: 100%;
+        }
+
+        .file-preview {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            object-fit: cover;
+        }
+
+        /* Alternative text display for files */
+        .file-text-preview {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .file-success-indicator {
+            color: #2ed573;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .navigation {
+                flex-direction: column;
+            }
+
+            .nav-btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+
+            .steps-container {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 10px;
+            }
+
+            .file-upload {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Enhanced CareerNavigator</h1>
+            <p>Complete Student Platform v3.0</p>
+        </header>
+
+        <nav class="navigation">
+            <button class="nav-btn active" data-section="home">🏠 Home</button>
+            <button class="nav-btn" data-section="sign-in">🔐 Sign In</button>
+            <button class="nav-btn" data-section="registration">📝 Registration</button>
+            <button class="nav-btn" data-section="profile">👤 Profile</button>
+            <button class="nav-btn" data-section="assessment">📊 Assessment</button>
+            <button class="nav-btn" data-section="colleges">🏫 Colleges</button>
+            <button class="nav-btn" data-section="ai-feature">🤖 AI</button>
+            <button class="nav-btn" data-section="dashboard">📈 Dashboard</button>
+            <button class="nav-btn" data-section="forum">💬 Forum</button>
+            <button class="nav-btn" data-section="puzzles">🧩 Puzzles</button>
+            <button class="nav-btn" data-section="redeem">🎁 Redeem</button>
+        </nav>
+
+        <main class="content">
+            <!-- Home Section -->
+            <section id="home" class="section active">
+                <h2>🌟 Navigate Your Career Journey with Military-Grade Security</h2>
+                <p>Complete lifecycle career guidance with 9-step secure registration, AI-powered assessments, gamified learning, forum discussions, and trusted mentor network.</p>
+
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-number" id="userCoins">25</div>
+                        <div>Coins Earned</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="completionRate">60%</div>
+                        <div>Completion</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="streakCount">3</div>
+                        <div>Day Streak</div>
+                    </div>
+                </div>
+
+                <h3>🔐 Secure Authentication Portal</h3>
+                <p>Choose your preferred authentication method to begin your secure career journey</p>
+
+                <div class="auth-methods">
+                    <div class="auth-method">
+                        <h4>Method 1: OAuth 2.0 with Google</h4>
+                        <button class="btn primary" id="googleAuth">🔐 Continue with Google</button>
+                    </div>
+                    <div class="auth-method">
+                        <h4>Method 2: Traditional Secure Authentication</h4>
+                        <button class="btn" id="traditionalAuth">📧 Email Authentication</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sign In Section -->
+            <section id="sign-in" class="section">
+                <h2>Welcome to Your Career Dashboard</h2>
+
+                <h3>Complete Secure Registration</h3>
+                <p>Complete our comprehensive 9-step registration process to unlock platform features</p>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="registrationProgress" style="width: 11.11%"></div>
+                </div>
+
+                <button class="btn success" id="completeRegistration">Complete Registration</button>
+
+                <h3>Career Assessment</h3>
+                <p>Take our 12-question enhanced assessment to get personalized recommendations</p>
+                <button class="btn" id="startAssessment">Start Assessment</button>
+            </section>
+
+            <!-- Registration Section -->
+            <section id="registration" class="section">
+                <h2>9-Step Secure Registration Process</h2>
+
+                <div class="steps-container" id="registrationSteps">
+                    <!-- Steps will be populated by JavaScript -->
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="regProgressBar" style="width: 11.11%"></div>
+                </div>
+
+                <div id="registrationForm">
+                    <!-- Form content will be populated by JavaScript -->
+                </div>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn" id="prevStep">← Previous</button>
+                    <button class="btn primary" id="nextStep">Next →</button>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile" class="section">
+                <h2>Your Enhanced Profile</h2>
+                <p>Profile auto-populated from registration</p>
+                <p><strong>Status:</strong> 100% Complete</p>
+
+                <h3>Personal Information</h3>
+                <div id="profileDisplay">
+                    <!-- Profile information will be displayed here -->
+                </div>
+
+                <button class="btn" id="editProfile">Edit Profile</button>
+                <button class="btn primary" id="viewCareerGuidance">View Career Guidance</button>
+            </section>
+
+            <!-- Assessment Section -->
+            <section id="assessment" class="section">
+                <h2>12-Question Enhanced Career Assessment</h2>
+                <p>Take our comprehensive multi-dimensional assessment covering interests, aptitude, personality, and learning styles. Earn 50 coins and receive personalized recommendations!</p>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="assessmentProgress" style="width: 0%"></div>
+                </div>
+
+                <div id="assessmentContainer">
+                    <!-- Assessment questions will be populated here -->
+                </div>
+
+                <div id="assessmentResults" class="results-container hidden">
+                    <!-- Assessment results will be displayed here -->
+                </div>
+            </section>
+
+            <!-- Colleges Section -->
+            <section id="colleges" class="section">
+                <h2>College Application Portal</h2>
+
+                <div class="colleges-grid" id="collegesGrid">
+                    <!-- College cards will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- AI Feature Section -->
+            <section id="ai-feature" class="section">
+                <h2>Your Personalized Career Guidance Path</h2>
+                <div id="careerGuidanceResults">
+                    <!-- Career guidance results will be displayed here -->
+                </div>
+            </section>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section">
+                <h2>📊 Student Dashboard</h2>
+
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-number" id="dashboardCoins">25</div>
+                        <div>Total Coins</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="puzzlesSolved">0</div>
+                        <div>Puzzles Solved</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="forumPosts">0</div>
+                        <div>Forum Posts</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="mentorSessions">0</div>
+                        <div>Mentor Sessions</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Forum Section -->
+            <section id="forum" class="section">
+                <h2>Community Forum</h2>
+
+                <div class="forum-categories" id="forumCategories">
+                    <!-- Forum categories will be populated by JavaScript -->
+                </div>
+
+                <div id="forumPosts" class="posts-container hidden">
+                    <!-- Forum posts will be displayed here -->
+                </div>
+            </section>
+
+            <!-- Puzzles Section -->
+            <section id="puzzles" class="section">
+                <h2>AI-Powered Puzzles</h2>
+
+                <h3>Select Your Course</h3>
+                <div class="courses-grid" id="coursesGrid">
+                    <!-- Courses will be populated by JavaScript -->
+                </div>
+
+                <div id="puzzlesList" class="hidden">
+                    <!-- Puzzles will be displayed here -->
+                </div>
+            </section>
+
+            <!-- Redeem Section -->
+            <section id="redeem" class="section">
+                <h2>Coin Redemption Center</h2>
+
+                <div class="redemption-options" id="redemptionOptions">
+                    <!-- Redemption options will be populated by JavaScript -->
+                </div>
+
+                <h3>Transaction History</h3>
+                <div id="transactionHistory">
+                    <p>No transactions yet. Start earning and redeeming coins!</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="fixed_app.js"></script>
+</body>
+</html>
